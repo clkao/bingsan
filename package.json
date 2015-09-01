@@ -9,8 +9,7 @@
     "url": "https://github.com/clkao/bingsan"
   },
   "homepage": "https://github.com/clkao/bingsan",
-  "keywords": [
-  ],
+  "keywords": [],
   "main": "bin/server.js",
   "scripts": {
     "start": "node ./node_modules/better-npm-run start",
@@ -56,6 +55,7 @@
     "http-proxy": "^1.11.1",
     "lru-memoize": "0.0.2",
     "map-props": "^0.1.1",
+    "material-ui": "^0.11.0",
     "piping": "0.2.0",
     "pretty-error": "^1.1.2",
     "query-string": "^2.4.0",
@@ -64,6 +64,7 @@
     "react-inline-css": "1.2.1",
     "react-redux": "0.9.0",
     "react-router": "v1.0.0-beta3",
+    "react-tap-event-plugin": "^0.1.7",
     "redux": "^1.0.1",
     "redux-form": "^0.6.1",
     "serialize-javascript": "^1.0.0",
