@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import {createTransitionHook} from '../universalRouter';
 
-const title = 'React Redux Example';
+const title = 'Bingsan - 名產';
 const description = 'All the modern best practices in one example.';
 const image = 'https://react-redux.herokuapp.com/logo.jpg';
 
@@ -38,8 +38,7 @@ const meta = {
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    user: PropTypes.object,
-    logout: PropTypes.func.isRequired
+    user: PropTypes.object
   }
 
   static contextTypes = {
@@ -78,15 +77,16 @@ export default class App extends Component {
           <div className="container">
             <Link to="/" className="navbar-brand">
               <div className={styles.brand}/>
-              React Redux Example
+              Bingsan - 名產
             </Link>
 
             <ul className="nav navbar-nav">
-              <li><Link to="/about">About Us</Link></li>
+              <li><Link to="/chooser">Chooser</Link></li>
+              <li><Link to="/about">About</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>
-                <a href="https://github.com/erikras/react-redux-universal-hot-example"
+                <a href="https://github.com/clkao/bingsan"
                    target="_blank" title="View on Github"><i className="fa fa-github"/></a>
               </li>
             </ul>
@@ -95,20 +95,11 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
-
         <div className="well text-center">
-          Have questions? Ask for help <a
-          href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-          target="_blank">on Github</a> or in the <a
-          href="http://www.reactiflux.com/" target="_blank">#react-redux-universal</a> Slack channel.
+          Logo and Emoji provided free by <a href="http://emojione.com/">Emoji One</a>
         </div>
       </div>
     );
-  }
-
-  handleLogout(event) {
-    event.preventDefault();
-    this.props.logout();
   }
 }
 

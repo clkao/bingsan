@@ -1,26 +1,15 @@
 {
-  "name": "react-redux-universal-hot-example",
-  "description": "Example of an isomorphic (universal) webapp using react redux and hot reloading",
-  "author": "Erik Rasmussen <rasmussenerik@gmail.com> (http://github.com/erikras)",
+  "name": "bingsan",
+  "description": "Bingsan - Name gfenerator",
+  "author": "Chia-liang Kao <clkao@clkao.org>",
   "license": "MIT",
-  "version": "0.0.4",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/erikras/react-redux-universal-hot-example"
+    "url": "https://github.com/clkao/bingsan"
   },
-  "homepage": "https://github.com/erikras/react-redux-universal-hot-example",
+  "homepage": "https://github.com/clkao/bingsan",
   "keywords": [
-    "react",
-    "isomorphic",
-    "universal",
-    "webpack",
-    "express",
-    "hot reloading",
-    "react-hot-reloader",
-    "redux",
-    "starter",
-    "boilerplate",
-    "babel"
   ],
   "main": "bin/server.js",
   "scripts": {
