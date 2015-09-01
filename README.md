@@ -30,4 +30,4 @@ http://clkao.mit-license.org/
 
 Based on the boilerplate derived from [react-redux-universal-hot-exampl](https://github.com/erikras/react-redux-universal-hot-example) under MIT License by Eirk Rasmussen.
 
-Chinese character metadata from [moedict-data](https://github.com/g0v/moedict-data), processed from [MOE Revised Dictionary](epaper.edu.tw/entrance/) under CC BY-ND 3.0.
+Chinese character metadata from [moedict-data](https://github.com/g0v/moedict-data), processed from [MOE Revised Dictionary](http://epaper.edu.tw/entrance/) under CC BY-ND 3.0.
