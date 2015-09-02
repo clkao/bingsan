@@ -1,6 +1,13 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import createMiddleware from './clientMiddleware';
 
+//import filter from 'redux-localstorage-filter';
+
+import adapter from 'redux-localstorage/lib/adapters/localStorage';
+import persistState from 'redux-localstorage'
+
+let localState = persistState;
+
 export default function createApiClientStore(client, data) {
   const middleware = createMiddleware(client);
   let finalCreateStore;
@@ -9,11 +16,16 @@ export default function createApiClientStore(client, data) {
     finalCreateStore = compose(
       applyMiddleware(middleware),
       devTools(),
+      localState(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)),
       createStore
     );
-  } else {
-    finalCreateStore = applyMiddleware(middleware)(createStore);
+  }
+  else if (__CLIENT__) {
+    finalCreateStore = compose(applyMiddleware(middleware), localState(), createStore);
+  }
+  else {
+    finalCreateStore = compose(applyMiddleware(middleware), createStore);
   }
 
   const reducer = require('../ducks/reducer');
