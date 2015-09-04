@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import {RaisedButtons, Tabs, Tab, Styles} from 'material-ui';
+import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Styles} from 'material-ui';
 import * as chooserActions from '../ducks/chooser';
 
 let injectTapEventPlugin = require("react-tap-event-plugin");
@@ -65,16 +65,16 @@ export default class NameChooser extends Component {
             <textarea className="corpus" name="corpus" onChange={::this.setCandidates}>
             </textarea>
           </Tab>
-          <Tab label="產生" onClick={::this.generate}>
-            <h1>Choose from {candidates.length} chars</h1>
-            <ul className="candidates">
+          <Tab label="產生" xonClick={::this.generate}>
+            <button onClick={::this.generate}>Choose from {candidates.length} chars</button>
+            <FloatingActionButton>
+              <FontIcon className="muidocs-icon-content-redo" onClick={::this.generate} />
+            </FloatingActionButton>
+            <div className="candidates">
             {
-              current.map( (name) =>
-                <li onClick={()=> this.favAdd(name, event)} key={name}>
-                  {name}
-                </li>)
+              current.map( (name) => <FlatButton onClick={()=> this.favAdd(name, event)} key={name} label={name} labelStyle={{fontSize: '30px'}}/>)
             }
-            </ul>
+            </div>
           </Tab>
           <Tab label="喜愛">
             <label htmlFor="corpus">候選字文本</label>
