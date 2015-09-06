@@ -1,9 +1,9 @@
 import React from 'react';
 import {Route} from 'react-router';
-import App from 'views/App';
-import Home from 'views/Home';
-import NameChooser from 'views/NameChooser';
-import NotFound from 'views/NotFound';
+import App from './App';
+import Home from './Home';
+import NameChooser from './NameChooser';
+import NotFound from './NotFound';
 
 export default function(store) {
   return (
