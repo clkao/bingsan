@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Styles} from 'material-ui';
 import * as chooserActions from '../ducks/chooser';
+import * as favActions from '../ducks/favorites';
 
 let injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -11,11 +12,11 @@ let ThemeManager = new Styles.ThemeManager();
 
 @connect(
   state => ({
-    favorites: state.chooser.favlist,
+    favorites: state.favorites,
     current: state.chooser.current,
     candidates: state.chooser.candidates,
   }),
-  dispatch => bindActionCreators(chooserActions, dispatch)
+  dispatch => bindActionCreators({...chooserActions, ...favActions}, dispatch)
 )
 export default class NameChooser extends Component {
   static propTypes = {
@@ -44,7 +45,6 @@ export default class NameChooser extends Component {
 
   favAdd(name, event) {
     this.props.favAdd(name);
-    event.stopPropagation();
   }
 
   importFav() {
@@ -65,10 +65,10 @@ export default class NameChooser extends Component {
             <textarea className="corpus" name="corpus" onChange={::this.setCandidates}>
             </textarea>
           </Tab>
-          <Tab label="產生" xonClick={::this.generate}>
+          <Tab label="產生">
             <button onClick={::this.generate}>Choose from {candidates.length} chars</button>
-            <FloatingActionButton>
-              <FontIcon className="muidocs-icon-content-redo" onClick={::this.generate} />
+            <FloatingActionButton onClick={::this.generate}>
+              <FontIcon className="muidocs-icon-content-redo" />
             </FloatingActionButton>
             <div className="candidates">
             {

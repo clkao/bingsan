@@ -1,11 +1,10 @@
 const CHOOSE = 'chooser/CHOOSE'
 const SET_CANDIDATE = 'chooser/SET_CANDIDATE'
 const SET_CURRENT = 'chooser/SET_CURRENT'
-const FAV_ADD = 'chooser/FAV_ADD'
-const FAV_REMOVE = 'chooser/FAV_REMOVE'
 
 //const chars = require '../chars';
 import chars from '../chars'
+
 export var charMap = new Map();
 chars.map( function(c) {
   if (!c.bopomofo) return;
@@ -26,7 +25,6 @@ chars.map( function(c) {
 
 const initialState = {
   loaded: false,
-  favlist: [],
   candidates: [],
   current: []
 };
@@ -50,30 +48,9 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         current: action.current
       };
-    case FAV_ADD:
-      return {
-        ...state,
-        favlist: [...state.favlist, action.name]
-      };
-    case FAV_REMOVE:
-      index = state.favlist.indexOf(action.name);
-      if (index < 0)
-        return state;
-      return {
-        ...state,
-        favlist: state.favlist.map( (x) => x != action.name )
-      };
     default:
       return state;
   }
-}
-
-export function favAdd(name) {
-  return {type: FAV_ADD, name }
-}
-
-export function favRemove(name) {
-  return {type: FAV_REMOVE, name }
 }
 
 export function setCandidates(corpus) {
