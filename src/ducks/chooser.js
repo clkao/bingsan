@@ -1,5 +1,6 @@
 const CHOOSE = 'chooser/CHOOSE'
 const SET_CANDIDATE = 'chooser/SET_CANDIDATE'
+const SET_CURRENT = 'chooser/SET_CURRENT'
 const FAV_ADD = 'chooser/FAV_ADD'
 const FAV_REMOVE = 'chooser/FAV_REMOVE'
 
@@ -44,22 +45,10 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         candidates: Object.keys(candidates),
       }
-    case CHOOSE:
-      const {candidates} = state;
-      let get = () => candidates[Math.floor(Math.random() * candidates.length)]
-      let current = [];
-      while (current.length < action.count) {
-        let chars = [0, 1].map( () => charMap.get(get()));
-        let tones = chars.map( (c) => c.tone )
-        if (tones[0] <= 2 && tones[1] <= 2)
-          continue;
-        if (tones[0] > 2 && tones[1] > 2)
-          continue;
-        current.push( chars.map( (c) => c.title ).join('') )
-      }
+    case SET_CURRENT:
       return {
         ...state,
-        current: current
+        current: action.current
       };
     case FAV_ADD:
       return {
@@ -92,6 +81,20 @@ export function setCandidates(corpus) {
 }
 
 export function choose(count) {
-  return {type: CHOOSE, count}
-  // body...
+  return (dispatch, getState) => {
+    dispatch({type: CHOOSE, count});
+    const {candidates} = getState().chooser;
+    let get = () => candidates[Math.floor(Math.random() * candidates.length)]
+    let current = [];
+    while (current.length < count) {
+      let chars = [0, 1].map( () => charMap.get(get()));
+      let tones = chars.map( (c) => c.tone )
+      if (tones[0] <= 2 && tones[1] <= 2)
+        continue;
+      if (tones[0] > 2 && tones[1] > 2)
+        continue;
+      current.push( chars.map( (c) => c.title ).join('') )
+    }
+    return dispatch({type: SET_CURRENT, current});
+  }
 }
