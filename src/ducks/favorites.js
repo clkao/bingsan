@@ -13,12 +13,12 @@ export function favRemove(name) {
 
 import Immutable from 'immutable';
 
-export default createReducer(new Immutable.OrderedSet(), {
+export default createReducer([], {
   [FAV_ADD] (state, action) {
-    state.add(action.name)
+    return state.add(action.name)
   },
   [FAV_REMOVE] (state, action) {
-    state.remove(action.name)
+    return state.remove(action.name)
   }
-});
+}, true, ::Immutable.OrderedSet);
 

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Styles} from 'material-ui';
+import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Styles} from 'material-ui';
 import * as chooserActions from '../ducks/chooser';
 import * as favActions from '../ducks/favorites';
 
@@ -47,6 +47,10 @@ export default class NameChooser extends Component {
     this.props.favAdd(name);
   }
 
+  importFavDialog() {
+    this.refs.importFavDialog.show()
+  }
+
   importFav() {
     const {favAdd} = this.props;
     let lines = this.refs.favList.getDOMNode().value.split(/\n/).filter( (x) => x.length );
@@ -56,6 +60,10 @@ export default class NameChooser extends Component {
   render() {
     const styles = require('./NameChooser.scss');
     const {current, favorites, candidates} = this.props;
+    let standardActions = [
+      { text: 'Cancel' },
+      { text: 'Submit', onTouchTap: ::this.importFav, ref: 'submit' }
+    ];
     return (
       <div className={styles.nameChooser + ' container'}>
         <DocumentMeta title="Bingsan - Choose"/>
@@ -77,9 +85,7 @@ export default class NameChooser extends Component {
             </div>
           </Tab>
           <Tab label="喜愛">
-            <label htmlFor="corpus">候選字文本</label>
-            <textarea ref="favList" className="fav" name="fav"></textarea>
-            <button onClick={::this.importFav}>Import</button>
+            <button onClick={::this.importFavDialog}>Import</button>
             <ul className="favorite">
             {
               favorites.map( (name) =>
@@ -88,6 +94,15 @@ export default class NameChooser extends Component {
                 </li>)
             }
             </ul>
+            <Dialog
+              ref="importFavDialog"
+              title="Dialog With Standard Actions"
+              actions={standardActions}
+              actionFocus="submit"
+              modal={false}>
+              <label htmlFor="favList">匯入喜愛名字</label>
+              <textarea ref="favList" className="fav" name="fav"></textarea>
+            </Dialog>
           </Tab>
         </Tabs>
       </div>
