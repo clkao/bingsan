@@ -5,6 +5,7 @@ import createMiddleware from './clientMiddleware';
 
 import adapter from 'redux-localstorage/lib/adapters/localStorage';
 import persistState from 'redux-localstorage'
+import promiseMiddleware from 'redux-promise-middleware';
 
 let localState = persistState;
 
@@ -14,7 +15,7 @@ export default function createApiClientStore(client, data) {
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
     const { devTools, persistState } = require('redux-devtools');
     finalCreateStore = compose(
-      applyMiddleware(middleware),
+      applyMiddleware(promiseMiddleware, middleware),
       devTools(),
       localState(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
