@@ -74,17 +74,20 @@ export default class NameChooser extends Component {
   choose(count) {
     const {candidates} = this.props;
     let get = () => candidates[Math.floor(Math.random() * candidates.length)]
-    let current = [];
-    while (current.length < count) {
-      let chars = [0, 1].map( () => charMap.get(get()));
-      let tones = chars.map( (c) => c.tone )
-      if (tones[0] <= 2 && tones[1] <= 2)
-        continue;
-      if (tones[0] > 2 && tones[1] > 2)
-        continue;
-      current.push( chars.map( (c) => c.title ).join('') )
+    function *getName() {
+      while(true) {
+        let chars = [0, 1].map( () => charMap.get(get()));
+        let tones = chars.map( (c) => c.tone )
+        if (tones[0] <= 2 && tones[1] <= 2)
+          continue;
+        if (tones[0] > 2 && tones[1] > 2)
+          continue;
+        yield chars.map( (c) => c.title ).join('');
+      }
     }
-    
+    let g = getName();
+    let current = (new Array(count)).map( () => g.next().value );
+    console.log(current);
     this.props.setCurrent(current);
   }
 
