@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Slider, Styles} from 'material-ui';
+import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Slider, TextField, Styles} from 'material-ui';
 import * as chooserActions from '../ducks/chooser';
 import * as favActions from '../ducks/favorites';
 import CorpusSelector from './CorpusSelector';
@@ -43,6 +43,19 @@ const selector = createSelector([corpusContent, chooserState, favoritesState], (
   }
 })
 
+function *getName(candidates, firstName, lastName = '') {
+  let get = () => candidates[Math.floor(Math.random() * candidates.length)]
+  while(true) {
+    let chars = [0, 1].map( (i) => charMap.get( firstName[i] || get() ));
+    let tones = chars.map( (c) => c.tone )
+    if (tones[0] <= 2 && tones[1] <= 2)
+      continue;
+    if (tones[0] > 2 && tones[1] > 2)
+      continue;
+    yield lastName + chars.map( (c) => c.title ).join('');
+  }
+}
+
 @connect(
   selector,
   dispatch => bindActionCreators({...chooserActions, ...favActions}, dispatch)
@@ -73,21 +86,9 @@ export default class NameChooser extends Component {
 
   choose(count) {
     const {candidates} = this.props;
-    let get = () => candidates[Math.floor(Math.random() * candidates.length)]
-    function *getName() {
-      while(true) {
-        let chars = [0, 1].map( () => charMap.get(get()));
-        let tones = chars.map( (c) => c.tone )
-        if (tones[0] <= 2 && tones[1] <= 2)
-          continue;
-        if (tones[0] > 2 && tones[1] > 2)
-          continue;
-        yield chars.map( (c) => c.title ).join('');
-      }
-    }
-    let g = getName();
-    let current = (new Array(count)).map( () => g.next().value );
-    console.log(current);
+    let [lastName, ...firstName] = ['lastName', 'firstName1', 'firstName2'].map( (key) => this.refs[key].getValue() );
+    let g = getName(candidates, firstName, lastName);
+    let current = Array.from(Array(count)).map( () => g.next().value );
     this.props.setCurrent(current);
   }
 
@@ -107,7 +108,6 @@ export default class NameChooser extends Component {
   }
   
   updateMaxStroke(e, value) {
-    console.log("updating", value);
     this.props.setMaxStroke(value);
   }
   render() {
@@ -126,6 +126,9 @@ export default class NameChooser extends Component {
           </Tab>
           <Tab label="產生">
             <Slider name="maxStroke" value={maxStroke} step={1} min={0} max={30} onChange={::this.updateMaxStroke}/>
+            <TextField ref="lastName" floatingLabelText="姓" style={{width: '2em'}}/>
+            <TextField ref="firstName1" floatingLabelText="名(1)" style={{width: '4em'}}/>
+            <TextField ref="firstName2" floatingLabelText="名(2)" style={{width: '4em'}}/>
             <button onClick={::this.generate}>Choose from {candidates.length} chars</button>
             <FloatingActionButton onClick={::this.generate}>
               <FontIcon className="muidocs-icon-content-redo" />
