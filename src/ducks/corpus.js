@@ -26,7 +26,6 @@ const initialState = Map({
 });
 
 const fromJS = object => {
-  debugger;
   console.log('gojs', object);
   return Map({ items: List(object.items.map( x => Corpus(x) )) });
 }
