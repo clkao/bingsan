@@ -4,6 +4,7 @@ const SET_MAXSTROKE = 'chooser/SET_MAXSTROKE'
 
 //const chars = require '../chars';
 import chars from '../chars'
+import {moe4808} from '../moe4808';
 
 export var charMap = new Map();
 chars.map( function(c) {
@@ -22,6 +23,10 @@ chars.map( function(c) {
 
   charMap.set(c.title, c)
 });
+
+for (let c of moe4808) {
+  charMap.get(c).common = true
+}
 
 import Immutable from 'immutable';
 import { createReducer } from 'redux-immutablejs'

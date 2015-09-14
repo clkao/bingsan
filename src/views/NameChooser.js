@@ -27,10 +27,17 @@ const selector = createSelector([corpusContent, chooserState, favoritesState], (
   var candidates = {};
   console.log('map state', corpusContent, chooser, candidates);
   let content = corpusContent.join('');
+  chooser.requireCommon = true;
   
   for (var char in content) {
     let c = charMap.get(content[char]);
-    if (c && c.count <= chooser.maxStroke) {
+    if (c) {
+      if (!c.common && chooser.requireCommon) {
+        continue;
+      }
+      if (c.count > chooser.maxStroke) {
+        continue;
+      }
       candidates[content[char]]++;
     }
   }
