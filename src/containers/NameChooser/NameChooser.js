@@ -2,35 +2,33 @@ import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Slider, TextField, Styles} from 'material-ui';
+import {FontIcon, FlatButton, FloatingActionButton, Tabs, Tab, Dialog, Slider, TextField, Styles} from 'material-ui';
 import * as chooserActions from '../../redux/modules/chooser';
 import * as favActions from '../../redux/modules/favorites';
 import CorpusSelector from './CorpusSelector';
 import {createSelector} from 'reselect';
 
-let injectTapEventPlugin = require("react-tap-event-plugin");
+const injectTapEventPlugin = require('react-tap-event-plugin');
 injectTapEventPlugin();
-let ThemeManager = new Styles.ThemeManager();
-let {charMap} = chooserActions;
+const ThemeManager = new Styles.ThemeManager();
+const {charMap} = chooserActions;
 
 const corpusState = state => state.corpus;
 const chooserState = state => state.chooser;
 const favoritesState = state => state.favorites;
 
 const corpusContent = createSelector(corpusState, (corpus) => {
-  console.log('recalculate corpus');
-  let content = corpus.get('items').filter(x => x.isSelected).map(x => Array.isArray(x.content) ? x.content.join('') : x.content).toArray();
-  return content;
+  return corpus.get('items').filter(x => x.isSelected).map(x => Array.isArray(x.content) ? x.content.join('') : x.content).toArray();
 });
 
-const selector = createSelector([corpusContent, chooserState, favoritesState], (corpusContent, chooser, favorites) => {
-  var candidates = {};
-  console.log('map state', corpusContent, chooser, candidates);
-  let content = corpusContent.join('');
+const selector = createSelector([corpusContent, chooserState, favoritesState], (_corpusContent, chooser, favorites) => {
+  const candidates = {};
+  const content = _corpusContent.join('');
+  // XXX: make this an option
   chooser.requireCommon = true;
-  
-  for (var char in content) {
-    let c = charMap.get(content[char]);
+
+  for (const char of content) {
+    const c = charMap.get(char);
     if (c) {
       if (!c.common && chooser.requireCommon) {
         continue;
@@ -38,23 +36,24 @@ const selector = createSelector([corpusContent, chooserState, favoritesState], (
       if (c.count > chooser.maxStroke) {
         continue;
       }
-      candidates[content[char]]++;
+      candidates[char]++;
     }
   }
-  
+
   return {
     favorites,
     candidates: Object.keys(candidates),
     current: chooser.current,
     maxStroke: chooser.maxStroke,
-  }
-})
+  };
+});
 
 function *getName(candidates, firstName, lastName = '') {
-  let get = () => candidates[Math.floor(Math.random() * candidates.length)]
-  while(true) {
-    let chars = [0, 1].map( (i) => charMap.get( firstName[i] || get() ));
-    let tones = chars.map( (c) => c.tone )
+  const get = () => candidates[Math.floor(Math.random() * candidates.length)];
+  const genName = () => [0, 1].map( (i) => charMap.get( firstName[i] || get() ));
+  for (;;) {
+    const chars = genName();
+    const tones = chars.map( c => c.tone );
     if (tones[0] <= 2 && tones[1] <= 2) {
       continue;
     }
@@ -73,7 +72,12 @@ export default class NameChooser extends Component {
   static propTypes = {
     favAdd: PropTypes.func.isRequired,
     favRemove: PropTypes.func.isRequired,
+    setMaxStroke: PropTypes.func.isRequired,
+    setCurrent: PropTypes.func.isRequired,
     maxStroke: PropTypes.number.isRequired,
+    candidates: PropTypes.array.isRequired,
+    current: PropTypes.array.isRequired,
+    favorites: PropTypes.array.isRequired,
   }
   static childContextTypes = {
     muiTheme: PropTypes.object
@@ -83,10 +87,6 @@ export default class NameChooser extends Component {
       muiTheme: ThemeManager.getCurrentTheme()
     };
   }
-  componentWillMount() {
-    //this.setState({current: [], candidates: [], favorites: []});
-  }
-
   generate() {
     this.choose(30);
   }
@@ -109,9 +109,9 @@ export default class NameChooser extends Component {
 
   importFav() {
     const {favAdd} = this.props;
-    let lines = this.refs.favList.getDOMNode().value.split(/\n/).filter( (x) => x.length );
+    const lines = this.refs.favList.getDOMNode().value.split(/\n/).filter( (x) => x.length );
     lines.forEach((line) => favAdd(line));
-    this.refs.importFavDialog.dismiss()
+    this.refs.importFavDialog.dismiss();
   }
 
   updateMaxStroke(e, value) {

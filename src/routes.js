@@ -7,7 +7,7 @@ import {
     NotFound,
   } from 'containers';
 
-export default function(store) {
+export default function(/* store */) {
   return (
     <Route component={App}>
       <Route path="/" component={Home}/>
