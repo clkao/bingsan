@@ -13,9 +13,9 @@ injectTapEventPlugin();
 let ThemeManager = new Styles.ThemeManager();
 let {charMap} = chooserActions;
 
-const corpusState = state => state.corpus
-const chooserState = state => state.chooser
-const favoritesState = state => state.favorites
+const corpusState = state => state.corpus;
+const chooserState = state => state.chooser;
+const favoritesState = state => state.favorites;
 
 const corpusContent = createSelector(corpusState, (corpus) => {
   console.log('recalculate corpus');
@@ -55,10 +55,12 @@ function *getName(candidates, firstName, lastName = '') {
   while(true) {
     let chars = [0, 1].map( (i) => charMap.get( firstName[i] || get() ));
     let tones = chars.map( (c) => c.tone )
-    if (tones[0] <= 2 && tones[1] <= 2)
+    if (tones[0] <= 2 && tones[1] <= 2) {
       continue;
-    if (tones[0] > 2 && tones[1] > 2)
+    }
+    if (tones[0] > 2 && tones[1] > 2) {
       continue;
+    }
     yield lastName + chars.map( (c) => c.title ).join('');
   }
 }
@@ -71,6 +73,7 @@ export default class NameChooser extends Component {
   static propTypes = {
     favAdd: PropTypes.func.isRequired,
     favRemove: PropTypes.func.isRequired,
+    maxStroke: PropTypes.number.isRequired,
   }
   static childContextTypes = {
     muiTheme: PropTypes.object
@@ -84,27 +87,24 @@ export default class NameChooser extends Component {
     //this.setState({current: [], candidates: [], favorites: []});
   }
 
-  componentWillReceiveProps(nextProps) {
-  }
-
   generate() {
     this.choose(30);
   }
 
   choose(count) {
     const {candidates} = this.props;
-    let [lastName, ...firstName] = ['lastName', 'firstName1', 'firstName2'].map( (key) => this.refs[key].getValue() );
-    let g = getName(candidates, firstName, lastName);
-    let current = Array.from(Array(count)).map( () => g.next().value );
+    const [lastName, ...firstName] = ['lastName', 'firstName1', 'firstName2'].map( (key) => this.refs[key].getValue() );
+    const g = getName(candidates, firstName, lastName);
+    const current = Array.from(Array(count)).map( () => g.next().value );
     this.props.setCurrent(current);
   }
 
-  favAdd(name, event) {
+  favAdd(name) {
     this.props.favAdd(name);
   }
 
   importFavDialog() {
-    this.refs.importFavDialog.show()
+    this.refs.importFavDialog.show();
   }
 
   importFav() {
@@ -113,14 +113,14 @@ export default class NameChooser extends Component {
     lines.forEach((line) => favAdd(line));
     this.refs.importFavDialog.dismiss()
   }
-  
+
   updateMaxStroke(e, value) {
     this.props.setMaxStroke(value);
   }
   render() {
     const styles = require('./NameChooser.scss');
     const {current, favorites, candidates, maxStroke} = this.props;
-    let standardActions = [
+    const standardActions = [
       { text: 'Cancel' },
       { text: 'Submit', onTouchTap: ::this.importFav, ref: 'submit' }
     ];

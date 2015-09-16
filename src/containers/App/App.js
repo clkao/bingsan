@@ -33,7 +33,7 @@ const meta = {
 };
 
 @connect(
-    state => ({user: null}),
+    () => ({user: null}),
     dispatch => bindActionCreators({}, dispatch))
 export default class App extends Component {
   static propTypes = {
@@ -69,11 +69,10 @@ export default class App extends Component {
 
   handleLogout(event) {
     event.preventDefault();
-    this.props.logout();
+    // this.props.logout();
   }
 
   render() {
-    const {user} = this.props;
     const styles = require('./App.scss');
     return (
       <div className={styles.app}>

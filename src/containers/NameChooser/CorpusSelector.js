@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {bindActionCreators} from 'redux';
-import {connectReduxForm} from 'redux-form';
 import {connect} from 'react-redux';
-import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Styles} from 'material-ui';
+import {Dialog, List, ListItem, ListDivider, Checkbox} from 'material-ui';
 import * as corpusAction from '../../redux/modules/corpus';
 
 @connect(
@@ -11,33 +10,37 @@ import * as corpusAction from '../../redux/modules/corpus';
 )
 export default class CorpusSelector extends Component {
   static propTypes = {
+    init: PropTypes.func.required,
+    importCorpus: PropTypes.func.required,
+    selectItem: PropTypes.func.required,
+    loadCorpus: PropTypes.func.required,
+    items: PropTypes.array,
   }
   componentWillMount() {
-    let titles = [
+    const titles = [
       { title: '莊子',
-        source:['莊子/逍遙遊', '莊子/齊物論', '莊子/養生主', '莊子/人間世', '莊子/德充符', '莊子/大宗師', '莊子/應帝王']
+        source: ['莊子/逍遙遊', '莊子/齊物論', '莊子/養生主', '莊子/人間世', '莊子/德充符', '莊子/大宗師', '莊子/應帝王']
       }
     ];
     this.props.init(titles);
   }
   importCorpus() {
     this.props.importCorpus( this.refs.corpusText.getDOMNode().value );
-    this.refs.importCorpusDialog.dismiss()
+    this.refs.importCorpusDialog.dismiss();
   }
-  
+
   loadCorpus(title) {
     this.props.loadCorpus(title);
   }
 
   showImportDialog() {
-    this.refs.importCorpusDialog.show()
+    this.refs.importCorpusDialog.show();
   }
-  handleItemCheck(item) { return (e, isChecked) => {
-    this.props.selectItem(item, isChecked);
-  }}
+  handleItemCheck(item) {
+    return (e, isChecked) => this.props.selectItem(item, isChecked);
+  }
   render() {
-    const styles = require('./NameChooser.scss');
-    let standardActions = [
+    const standardActions = [
       { text: 'Cancel' },
       { text: 'Submit', onTouchTap: ::this.importCorpus, ref: 'submit' }
     ];
