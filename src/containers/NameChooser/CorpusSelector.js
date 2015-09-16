@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connectReduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Styles} from 'material-ui';
-import * as corpusAction from '../ducks/corpus';
+import * as corpusAction from '../../redux/modules/corpus';
 
 @connect(
   state => ({corpus: state.corpus, items: state.corpus.get('items').toJS() }),

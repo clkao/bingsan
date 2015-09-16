@@ -3,8 +3,8 @@ const SET_CURRENT = 'chooser/SET_CURRENT'
 const SET_MAXSTROKE = 'chooser/SET_MAXSTROKE'
 
 //const chars = require '../chars';
-import chars from '../chars'
-import {moe4808} from '../moe4808';
+import chars from '../../chars'
+import {moe4808} from '../../moe4808';
 
 export var charMap = new Map();
 chars.map( function(c) {

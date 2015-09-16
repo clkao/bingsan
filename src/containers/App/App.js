@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import {createTransitionHook} from '../universalRouter';
+import { createTransitionHook } from 'helpers/universalRouter';
 
 const title = 'Bingsan - 名產';
 const description = 'All the modern best practices in one example.';
@@ -67,6 +67,11 @@ export default class App extends Component {
     router.removeTransitionHook(this.transitionHook);
   }
 
+  handleLogout(event) {
+    event.preventDefault();
+    this.props.logout();
+  }
+
   render() {
     const {user} = this.props;
     const styles = require('./App.scss');
@@ -102,4 +107,3 @@ export default class App extends Component {
     );
   }
 }
-

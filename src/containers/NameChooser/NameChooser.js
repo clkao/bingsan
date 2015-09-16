@@ -3,8 +3,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import DocumentMeta from 'react-document-meta';
 import {FontIcon, FlatButton, FloatingActionButton, RaisedButtons, Tabs, Tab, Dialog, Paper, List, ListItem, ListDivider, Checkbox, Slider, TextField, Styles} from 'material-ui';
-import * as chooserActions from '../ducks/chooser';
-import * as favActions from '../ducks/favorites';
+import * as chooserActions from '../../redux/modules/chooser';
+import * as favActions from '../../redux/modules/favorites';
 import CorpusSelector from './CorpusSelector';
 import {createSelector} from 'reselect';
 

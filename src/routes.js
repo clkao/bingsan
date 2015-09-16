@@ -1,9 +1,11 @@
 import React from 'react';
 import {Route} from 'react-router';
-import App from './App';
-import Home from './Home';
-import NameChooser from './NameChooser';
-import NotFound from './NotFound';
+import {
+    App,
+    Home,
+    NameChooser,
+    NotFound,
+  } from 'containers';
 
 export default function(store) {
   return (

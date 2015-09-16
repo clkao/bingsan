@@ -7,10 +7,9 @@ import compression from 'compression';
 import httpProxy from 'http-proxy';
 import path from 'path';
 import createStore from './redux/create';
-import api from './api/api';
-import ApiClient from './ApiClient';
-import universalRouter from './universalRouter';
-import Html from './Html';
+import ApiClient from './helpers/ApiClient';
+import universalRouter from './helpers/universalRouter';
+import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 
 const pretty = new PrettyError();
@@ -20,7 +19,7 @@ const proxy = httpProxy.createProxyServer({
 });
 
 app.use(compression());
-app.use(favicon(path.join(__dirname, '..', 'static', 'logo.svg')));
+app.use(favicon(path.join(__dirname, 'containers', 'Home', 'logo.svg')));
 
 app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 
@@ -50,9 +49,15 @@ app.use((req, res) => {
   const client = new ApiClient(req);
   const store = createStore(client);
   const location = new Location(req.path, req.query);
-  if (__DISABLE_SSR__) {
+
+  const hydrateOnClient = function() {
     res.send('<!doctype html>\n' +
       React.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={<div/>} store={store}/>));
+  }
+
+  if (__DISABLE_SSR__) {
+    hydrateOnClient();
+    return;
   } else {
     universalRouter(location, undefined, store)
       .then(({component, transition, isRedirect}) => {
@@ -69,7 +74,7 @@ app.use((req, res) => {
           return;
         }
         console.error('ROUTER ERROR:', pretty.render(error));
-        res.status(500).send({error: error.stack});
+        hydrateOnClient(); // let client render error page or re-request data
       });
   }
 });
@@ -78,13 +83,9 @@ if (config.port) {
   app.listen(config.port, (err) => {
     if (err) {
       console.error(err);
-    } else {
-      api().then(() => {
-        console.info('==> ✅  Server is listening');
-        console.info('==> 🌎  %s running on port %s, API on port %s', config.app.name, config.port, config.apiPort);
-        console.info('----------\n==> 💻  Open http://localhost:%s in a browser to view the app.', config.port);
-      });
     }
+    console.info('----\n==> ✅  %s is running.', config.app.name);
+    console.info('==> 💻  Open http://localhost:%s in a browser to view the app.', config.port);
   });
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');
