@@ -27,7 +27,7 @@ export default class Home extends Component {
         </div>
 
         <div className="container">
-            <Link to="/chooser" className="btn btn-primary">來吧</Link>
+            <Link to="/chooser/" className="btn btn-primary">來吧</Link>
         </div>
       </div>
     );
