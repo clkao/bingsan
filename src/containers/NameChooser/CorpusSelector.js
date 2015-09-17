@@ -68,7 +68,7 @@ export default class CorpusSelector extends Component {
             secondaryTextLines={2} />
           )
         }
-        <ListDivider inset={true} />
+        <ListDivider inset />
         <ListItem primaryText="Import..." onClick={::this.showImportDialog} />
       </List>
     );

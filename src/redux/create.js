@@ -1,12 +1,14 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import createMiddleware from './middleware/clientMiddleware';
-
-import localState from 'redux-localstorage';
 import promiseMiddleware from 'redux-promise-middleware';
 
 export default function createApiClientStore(client, data) {
   const middleware = createMiddleware(client);
   let finalCreateStore;
+  let localState;
+  if (__CLIENT__) {
+    localState = require('redux-localstorage');
+  }
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
     const { devTools, persistState } = require('redux-devtools');
     finalCreateStore = compose(
