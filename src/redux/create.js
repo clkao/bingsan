@@ -3,28 +3,32 @@ import createMiddleware from './middleware/clientMiddleware';
 import promiseMiddleware from 'redux-promise-middleware';
 
 export default function createApiClientStore(client, data) {
-  const middleware = createMiddleware(client);
-  let finalCreateStore;
+  const reducer = require('./modules/reducer');
+  const middlewares = applyMiddleware(promiseMiddleware, createMiddleware(client));
   let localState;
+  let finalCreateStore;
+  let finalReducer;
   if (__CLIENT__) {
     localState = require('redux-localstorage');
+    const {mergePersistedState} = localState;
+    finalReducer = compose(mergePersistedState())(reducer);
   }
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
     const { devTools, persistState } = require('redux-devtools');
     finalCreateStore = compose(
-      applyMiddleware(promiseMiddleware, middleware),
+      middlewares,
       devTools(),
-      localState(),
+      localState.default(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(createStore);
   } else if (__CLIENT__) {
-    finalCreateStore = compose(applyMiddleware(middleware), localState())(createStore);
+    finalCreateStore = compose(middlewares, localState.default())(createStore);
   } else {
-    finalCreateStore = applyMiddleware(middleware)(createStore);
+    finalCreateStore = middlewares(createStore);
+    finalReducer = reducer;
   }
 
-  const reducer = require('./modules/reducer');
-  const store = finalCreateStore(reducer, data);
+  const store = finalCreateStore(finalReducer, data);
   store.client = client;
 
   if (__DEVELOPMENT__ && module.hot) {
