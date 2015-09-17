@@ -7,7 +7,7 @@ import { createTransitionHook } from 'helpers/universalRouter';
 
 const title = 'Bingsan - 名產';
 const description = '名稱產生器';
-const image = 'https://bingsan.clkao.org/logo.svg';
+const image = 'http://bingsan.clkao.org/logo.png';
 
 const meta = {
   title,
