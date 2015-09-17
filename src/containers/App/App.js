@@ -6,8 +6,8 @@ import DocumentMeta from 'react-document-meta';
 import { createTransitionHook } from 'helpers/universalRouter';
 
 const title = 'Bingsan - 名產';
-const description = 'All the modern best practices in one example.';
-const image = 'https://react-redux.herokuapp.com/logo.jpg';
+const description = '名稱產生器';
+const image = 'https://bingsan.clkao.org/logo.svg';
 
 const meta = {
   title,
@@ -21,8 +21,8 @@ const meta = {
       'og:title': title,
       'og:description': description,
       'twitter:card': 'summary',
-      'twitter:site': '@erikras',
-      'twitter:creator': '@erikras',
+      'twitter:site': '@clkao',
+      'twitter:creator': '@clkao',
       'twitter:title': title,
       'twitter:description': description,
       'twitter:image': image,

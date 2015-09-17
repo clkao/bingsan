@@ -1,4 +1,6 @@
-#npm run build
+npm run build
+find static -name '*.html' -delete
+cp -f src/containers/Home/logo.svg static/
 npm run start-prod &
 trap "jobs -p; sleep 5; pstree -p `jobs -p`; kill -INT `jobs -p | xargs`" EXIT
 sleep 10;
