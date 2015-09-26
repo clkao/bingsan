@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
-import { createTransitionHook } from 'helpers/universalRouter';
 
 const title = 'Bingsan - 名產';
 const description = '名稱產生器';
@@ -38,33 +37,22 @@ const meta = {
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    history: PropTypes.object
   }
 
   static contextTypes = {
-    router: PropTypes.object.isRequired,
     store: PropTypes.object.isRequired
   };
-
-  componentWillMount() {
-    const {router, store} = this.context;
-    this.transitionHook = createTransitionHook(store);
-    router.addTransitionHook(this.transitionHook);
-  }
 
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
       // login
-      this.context.router.transitionTo('/loginSuccess');
+      this.props.history.pushState(null, '/loginSuccess');
     } else if (this.props.user && !nextProps.user) {
       // logout
-      this.context.router.transitionTo('/');
+      this.props.history.pushState(null, '/');
     }
-  }
-
-  componentWillUnmount() {
-    const {router} = this.context;
-    router.removeTransitionHook(this.transitionHook);
   }
 
   handleLogout(event) {
