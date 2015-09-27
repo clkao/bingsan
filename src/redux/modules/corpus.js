@@ -9,6 +9,7 @@ import Qs from 'qs';
 import Immutable from 'immutable';
 import { List, Map, Record } from 'immutable';
 import { createReducer } from 'redux-immutablejs';
+require('isomorphic-fetch');
 
 const Corpus = new Record({
   title: '',
