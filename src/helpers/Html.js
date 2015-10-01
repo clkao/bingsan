@@ -39,8 +39,8 @@ export default class Html extends Component {
           <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css' />
 
           {/* styles (will be present only in production with webpack extract text plugin) */}
-          {Object.keys(assets.styles).map((style, i) =>
-            <link href={assets.styles[style]} key={i} media="screen, projection"
+          {Object.keys(assets.styles).map((style, key) =>
+            <link href={assets.styles[style]} key={key} media="screen, projection"
                   rel="stylesheet" type="text/css"/>
           )}
         </head>
