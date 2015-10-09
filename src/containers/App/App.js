@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DocumentMeta from 'react-document-meta';
+import { pushState } from 'redux-router';
 
 const title = 'Bingsan - 名產';
 const description = '名稱產生器';
@@ -31,14 +32,22 @@ const meta = {
   }
 };
 
+const NavbarLink = ({to, children}) => (
+  <Link to={to} activeStyle={{
+    color: 'red'
+  }}>
+    {children}
+  </Link>
+);
+
 @connect(
     () => ({user: null}),
-    dispatch => bindActionCreators({}, dispatch))
+    dispatch => bindActionCreators({pushState}, dispatch))
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object.isRequired,
     user: PropTypes.object,
-    history: PropTypes.object
+    pushState: PropTypes.func.isRequired
   }
 
   static contextTypes = {
@@ -48,10 +57,10 @@ export default class App extends Component {
   componentWillReceiveProps(nextProps) {
     if (!this.props.user && nextProps.user) {
       // login
-      this.props.history.pushState(null, '/loginSuccess');
+      this.props.pushState(null, '/loginSuccess');
     } else if (this.props.user && !nextProps.user) {
       // logout
-      this.props.history.pushState(null, '/');
+      this.props.pushState(null, '/');
     }
   }
 
@@ -73,8 +82,8 @@ export default class App extends Component {
             </Link>
 
             <ul className="nav navbar-nav">
-              <li><Link to="/chooser/">Chooser</Link></li>
-              <li><Link to="/about">About</Link></li>
+              <li><NavbarLink to="/chooser/">Chooser</NavbarLink></li>
+              <li><NavbarLink to="/about">About</NavbarLink></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               <li>

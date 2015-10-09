@@ -7,12 +7,12 @@ import {
     NotFound,
   } from 'containers';
 
-export default function(history) {
+export default (store) => {
   return (
-    <Route component={App} history={history}>
+    <Route component={App}>
       <Route path="/" component={Home}/>
       <Route path="/chooser/" component={NameChooser}/>
       <Route path="*" component={NotFound}/>
     </Route>
   );
-}
+};

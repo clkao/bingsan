@@ -1,34 +1,31 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore as _createStore, applyMiddleware, compose } from 'redux';
 import createMiddleware from './middleware/clientMiddleware';
+import transitionMiddleware from './middleware/transitionMiddleware';
 import promiseMiddleware from 'redux-promise-middleware';
 
-export default function createApiClientStore(client, data) {
-  const reducer = require('./modules/reducer');
-  const middlewares = applyMiddleware(promiseMiddleware, createMiddleware(client));
-  let localState;
-  let finalCreateStore;
-  let finalReducer;
+export default function createStore(reduxReactRouter, getRoutes, createHistory, client, data) {
+  const middleware = [promiseMiddleware, createMiddleware(client)];
+
   if (__CLIENT__) {
-    localState = require('redux-localstorage');
-    const {mergePersistedState} = localState;
-    finalReducer = compose(mergePersistedState())(reducer);
+    middleware.push(transitionMiddleware);
   }
+
+  let finalCreateStore;
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
     const { devTools, persistState } = require('redux-devtools');
     finalCreateStore = compose(
-      middlewares,
+      applyMiddleware(...middleware),
       devTools(),
-      localState.default(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
-    )(createStore);
-  } else if (__CLIENT__) {
-    finalCreateStore = compose(middlewares, localState.default())(createStore);
+    )(_createStore);
   } else {
-    finalCreateStore = middlewares(createStore);
-    finalReducer = reducer;
+    finalCreateStore = applyMiddleware(...middleware)(_createStore);
   }
 
-  const store = finalCreateStore(finalReducer, data);
+  finalCreateStore = reduxReactRouter({ getRoutes, createHistory })(finalCreateStore);
+
+  const reducer = require('./modules/reducer');
+  const store = finalCreateStore(reducer, data);
   store.client = client;
 
   if (__DEVELOPMENT__ && module.hot) {
